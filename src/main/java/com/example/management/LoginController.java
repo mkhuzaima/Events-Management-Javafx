@@ -2,16 +2,22 @@ package com.example.management;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
+
+    private DBModel model = new DBModel();
 
     @FXML
     private TextField txtEmail;
@@ -29,8 +35,6 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bindPasswordShowHideWithCheckBox();
-
-
     }
 
     private void bindPasswordShowHideWithCheckBox() {
@@ -60,10 +64,51 @@ public class LoginController implements Initializable {
 
 
     @FXML
-    protected  void onLoginClicked(){
+    protected  void onLoginClicked(ActionEvent event ){
         System.out.println("Username: " + txtEmail.getText());
         System.out.println("Password: " + pass_hidden.getText());
         System.out.println("Login button clicked");
+
+
+        try {
+
+//            check if email is empty
+            if (txtEmail.getText().isBlank()) {
+                showAlert("Email is required.", Alert.AlertType.ERROR);
+            }
+            else if (pass_hidden.getText().isBlank()) {
+                showAlert("Password is required.", Alert.AlertType.ERROR);
+            }
+            else {
+                if (model.UserLogin(txtEmail.getText(), pass_hidden.getText())) {
+                    FXMLLoader fxmlLoader = new FXMLLoader(ManagementApplication.class.getResource("events-view.fxml"));
+
+                    Parent root1 = fxmlLoader.load();
+
+                    // update parent's stage
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(new Scene(root1));
+                    stage.show();
+                    stage.setTitle("Events Management");
+                }
+                else {
+                    showAlert("Username or password is incorrect.", Alert.AlertType.INFORMATION);
+                }
+            }
+        } catch(SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        switch (type) {
+            case ERROR -> alert.setTitle("ERROR");
+            case INFORMATION -> alert.setTitle("SUCCESS");
+            case WARNING -> alert.setTitle("WARNING");
+        }
+        alert.setHeaderText(message);
+        alert.show();
     }
 
 }
