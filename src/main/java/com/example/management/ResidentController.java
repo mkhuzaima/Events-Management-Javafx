@@ -1,6 +1,6 @@
 package com.example.management;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
+import jakarta.mail.MessagingException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,48 +18,38 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-public class EventsController implements Initializable {
-
+public class ResidentController implements Initializable {
 
     private DBModel model = new DBModel();
-
-
-
-    //    button
-    @FXML private Button actionButton;
-
     int currentId = -1;
 
-
-
-
-    @FXML private TextField hoursField;
-    @FXML private TextField minutesField;
-    @FXML private TextField venueField;
-//    @FXML private ComboBox<String> nameComboBox;
     @FXML private TextField nameField;
-    @FXML private TextField organizerField;
+    @FXML private TextField houseNumberField;
+    @FXML private TextField clusterField;
+    @FXML private TextField emailField;
+    @FXML private Button actionButton;
 
-    @FXML private DatePicker datePicker;
-    @FXML private TableColumn<MyEvent, String> nameColumn;
+    @FXML private TextArea announcementField;
 
-    @FXML private TableColumn<MyEvent, String> venueColumn;
-    @FXML private TableColumn<MyEvent, String> dateColumn;
-    @FXML private TableColumn<MyEvent, String> timeColumn;
-    @FXML private TableColumn<MyEvent, String> organizerColumn;
-    @FXML private TableColumn<MyEvent, MyEvent> editColumn;
-    @FXML private TableColumn<MyEvent, MyEvent> deleteColumn;
+    @FXML private Button sendAnnouncementButton;
+
+    
+    @FXML private TableColumn<Resident, String> nameColumn;
+
+    @FXML private TableColumn<Resident, String> houseNumberColumn;
+    @FXML private TableColumn<Resident, String> clusterColumn;
+    @FXML private TableColumn<Resident, String> emailColumn;
+    @FXML private TableColumn<Resident, Resident> editColumn;
+    @FXML private TableColumn<Resident, Resident> deleteColumn;
 
 
-    @FXML private ObservableList<MyEvent> myEvents = FXCollections.observableArrayList();
+    @FXML private ObservableList<Resident> events = FXCollections.observableArrayList();
 
 
     @FXML
-    private TableView<MyEvent> eventsTable;
+    private TableView<Resident> residentsTable;
 
 
     // ...
@@ -67,40 +57,29 @@ public class EventsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // add listener to avoid invalid input
-        addListenerToField(hoursField, 23);
-        addListenerToField(minutesField, 59);
-        // ...
+        addListenerToField(houseNumberField);
 
-        // Set up the columns
-        timeColumn.setCellValueFactory(cellData -> {
-            MyEvent myEvent = cellData.getValue();
-            int hours = myEvent.getHours();
-            int minutes = myEvent.getMinutes();
-            String time = String.format("%02d:%02d", hours, minutes);
-            return new ReadOnlyStringWrapper(time);
-        });
-
-//        timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+//        SET up the column in the table
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        venueColumn.setCellValueFactory(new PropertyValueFactory<>("venue"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        organizerColumn.setCellValueFactory(new PropertyValueFactory<>("organizer"));
+        houseNumberColumn.setCellValueFactory(new PropertyValueFactory<>("houseNumber"));
+        clusterColumn.setCellValueFactory(new PropertyValueFactory<>("cluster"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         // Add an edit button to each row
-        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory =
-                new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
+        Callback<TableColumn<Resident, Resident>, TableCell<Resident, Resident>> cellFactory =
+                new Callback<TableColumn<Resident, Resident>, TableCell<Resident, Resident>>() {
                     @Override
-                    public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
+                    public TableCell<Resident, Resident> call(TableColumn<Resident, Resident> column) {
                         return new EditButtonCell();
                     }
                 };
         editColumn.setCellFactory(cellFactory);
 
         // Add a delete button to each row
-        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory2 =
-                new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
+        Callback<TableColumn<Resident, Resident>, TableCell<Resident, Resident>> cellFactory2 =
+                new Callback<TableColumn<Resident, Resident>, TableCell<Resident, Resident>>() {
                     @Override
-                    public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
+                    public TableCell<Resident, Resident> call(TableColumn<Resident, Resident> column) {
                         return new DeleteButtonCell();
                     }
                 };
@@ -114,9 +93,8 @@ public class EventsController implements Initializable {
 
 
 //        occupy full width
-        eventsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        residentsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
-
     public void openMainMenu(ActionEvent actionEvent) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(ManagementApplication.class.getResource("main-view.fxml"));
@@ -131,20 +109,43 @@ public class EventsController implements Initializable {
 
     }
 
-// ...
+    public void onSendAnnouncementButtonClicked(ActionEvent actionEvent) {
+//        get the announcement
+        String announcement = announcementField.getText();
+        if (announcement == null ||  announcement.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Announcement is empty");
+            alert.setContentText("Please enter an announcement");
+            alert.showAndWait();
+        }
+        else {
+            try {
+                model.sendAnnouncement(announcement);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Announcement sent");
+                alert.setContentText("Announcement sent successfully");
+                alert.showAndWait();
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
     private abstract class MyTableCellButton<T> extends TableCell<T, T> {
         private Button button;
         public MyTableCellButton(String text) {
             button = new Button(text);
 
-                // occupy full width
-                button.setMaxWidth(Double.MAX_VALUE);
+            // occupy full width
+            button.setMaxWidth(Double.MAX_VALUE);
 
-                button.setOnAction(event -> {
-                    T myEventItem = getTableRow().getItem();
-                    onEvent(myEventItem);
-                });
+            button.setOnAction(event -> {
+                T myEventItem = getTableRow().getItem();
+                onEvent(myEventItem);
+            });
         }
 
         abstract void onEvent(T myEvent);
@@ -161,31 +162,25 @@ public class EventsController implements Initializable {
         }
     }
 
-//    Define the edit button cell
-    private class EditButtonCell extends MyTableCellButton<MyEvent> {
+    //    Define the edit button cell
+    private class EditButtonCell extends MyTableCellButton<Resident> {
 
         public EditButtonCell() {
             super("Edit");
         }
 
-//        are all fields empty
+        //        are all fields empty
         private boolean allFieldsEmpty() {
-            return (hoursField.getText()== null || hoursField.getText().isBlank() || hoursField.getText().equals("0") ) &&
-                    ( minutesField.getText() == null || hoursField.getText().isBlank() || minutesField.getText().equals("0") ) &&
-                    (venueField.getText() == null ||venueField.getText().isEmpty()) &&
-                    (nameField.getText() == null ||nameField.getText().isEmpty()) &&
-                    (organizerField.getText() == null ||organizerField.getText().isEmpty()) &&
-                    datePicker.getValue() == null;
+            return (nameField.getText().isEmpty() || nameField.getText().equals("0") ) &&
+                    houseNumberField.getText().isEmpty() &&
+                    clusterField.getText().isEmpty() &&
+                    emailField.getText().isEmpty();
         }
 
         @Override
-        void onEvent(MyEvent myEvent) {
-
-
+        void onEvent(Resident myEvent) {
             // Implement your edit event logic here
             System.out.println("event name is " + myEvent.getName());
-            System.out.println("event venue is " + myEvent.getVenue());
-
 
             if (!allFieldsEmpty()) {
 //                ask whether to discard previous
@@ -214,12 +209,12 @@ public class EventsController implements Initializable {
     }
 
     // Define the delete button cell
-    private class DeleteButtonCell extends  MyTableCellButton<MyEvent> {
+    private class DeleteButtonCell extends  MyTableCellButton<Resident> {
 
         public DeleteButtonCell() { super("Delete"); }
 
         @Override
-        void onEvent(MyEvent myEvent) {
+        void onEvent(Resident myEvent) {
 
 //            ask for confirmation using alert
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -234,7 +229,7 @@ public class EventsController implements Initializable {
                 // delete event from database
 
                 try {
-                    model.deleteEvent(myEvent.getId(), false);
+                    model.deleteResident(myEvent.getId());
                     refreshData();
                 } catch (SQLException e) {
                     System.out.println("exception while deleting");
@@ -254,7 +249,7 @@ public class EventsController implements Initializable {
     }
 
 
-    private void addListenerToField(TextField field, int x) {
+    private void addListenerToField(TextField field) {
         field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             System.out.println("observableValue: " + observableValue);
 //                remove non-digit characters
@@ -270,113 +265,70 @@ public class EventsController implements Initializable {
                 field.setText(newValue.replaceAll("0+", ""));
 //            should be in range 0-x
 
-            } else if (Integer.parseInt(newValue) > x) {
-                field.setText(String.valueOf(x));
             }
         });
     }
 
 
-//    clear all fields
+    //    clear all fields
     private void clearFields() {
         actionButton.setText("Add");
-        fillFieldsWith(0, 0, null, null, "", "");
+        fillFieldsWith("", "", "", "");
         currentId = -1;
     }
 
-    private void fillFieldsWith(MyEvent event){
+    private void fillFieldsWith(Resident event){
+
         actionButton.setText("Edit");
-        fillFieldsWith(event.getHours(), event.getMinutes(), event.getName(), event.getDate(), event.getVenue(), event.getOrganizer());
+        fillFieldsWith(event.getName(), event.getHouseNumber(), event.getCluster(), event.getEmail());
         currentId = event.getId();
     }
 
-    private void fillFieldsWith(int hours, int minutes, String name, LocalDate date, String venue, String organizer) {
-        hoursField.setText(String.valueOf(hours));
-        minutesField.setText(String.valueOf(minutes));
+//    name, housenumber, cluster, email
+    private void fillFieldsWith(String name, String houseNumber, String cluster, String email) {
         nameField.setText(name);
-        datePicker.setValue(date);
-        venueField.setText(venue);
-        organizerField.setText(organizer);
-
-        if (date == null ) {
-            datePicker.getEditor().clear();
-        }
-        else {
-            datePicker.getEditor().setText(date.toString());
-        }
+        houseNumberField.setText(houseNumber);
+        clusterField.setText(cluster);
+        emailField.setText(email);
     }
 
-    @FXML private void handleAddButton(ActionEvent event) {
+    public void handleActionButton(ActionEvent actionEvent) throws SQLException {
 //        check operation
 
-
         String name = nameField.getText();
-        LocalDate date = datePicker.getValue();
-        int hours = Integer.parseInt(hoursField.getText());
-        int minutes = Integer.parseInt(minutesField.getText());
-        String venue = venueField.getText();
-
-        String organizer = organizerField.getText();
-
+        String houseNumber = houseNumberField.getText();
+        String cluster = clusterField.getText();
+        String email = emailField.getText();
 
         if (actionButton.getText().equals("Edit")) {
             System.out.println("edit.id is " + currentId);
             System.out.println("Edit button clicked");
 
-//            update the event from database
-            try {
-                model.updateEvent(name, date, hours, minutes, venue, organizer, currentId);
-
-//                refresh the table
-                refreshData();
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            model. updateResident(name, houseNumber, cluster, email, currentId);
+            refreshData();
         }
         else {
             System.out.println("add.id is " + currentId);
             System.out.println("Add button clicked");
 
-//            add the event to database
+            model.addResident(name, houseNumber, cluster, email);
             try {
-                model.addEvent(name, date, hours, minutes, venue, organizer);
-
-//                refresh the table
                 refreshData();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
-//            MyEvent newEvent = new MyEvent(name, date, hours, minutes, venue);
-//
-////            add to events list
-//            myEvents.add(newEvent);
         }
 
-        System.out.println("Hours: " + hoursField.getText());
-        System.out.println("Minutes: " + minutesField.getText());
-        System.out.println("Name: " + nameField.getText());
-        System.out.println("Date: " + datePicker.getValue());
         clearFields();
     }
 
 
-//    synchronize the events list with the database
+    //    synchronize the events list with the database
     private void refreshData() throws SQLException {
-            myEvents = model.getAllEvents();
-            eventsTable.setItems(myEvents);
+        events = model.getAllResidents();
+        residentsTable.setItems(events);
     }
-//
-//    private void updateEvents(MyEvent event) {
-//
-//        for(int i = 0; i < myEvents.size(); i++) {
-//            if (myEvents.get(i).getId() == currentId){
-//                myEvents.set(i, event);
-//                break;
-//            }
-//        }
-//    }
+
 
     @FXML private void handleCancelButton(ActionEvent event) {
         System.out.println("Cancel button clicked");

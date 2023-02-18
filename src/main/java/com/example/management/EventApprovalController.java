@@ -18,44 +18,51 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class EventsController implements Initializable {
+public class EventApprovalController implements Initializable {
 
 
     private DBModel model = new DBModel();
-
-
-
     //    button
-    @FXML private Button actionButton;
+    @FXML
+    private Button actionButton;
 
     int currentId = -1;
 
 
+    @FXML
+    private TextField hoursField;
+    @FXML
+    private TextField minutesField;
+    @FXML
+    private TextField venueField;
+    @FXML
+    private ComboBox<String> typeComboBox;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private TableColumn<MyEvent, String> nameColumn;
+
+    @FXML
+    private TableColumn<MyEvent, String> venueColumn;
+    @FXML
+    private TableColumn<MyEvent, String> dateColumn;
+    @FXML
+    private TableColumn<MyEvent, String> timeColumn;
+    @FXML
+    private TableColumn<MyEvent, String> organizerColumn;
+    @FXML
+    private TableColumn<MyEvent, MyEvent> editColumn;
+    @FXML
+    private TableColumn<MyEvent, MyEvent> deleteColumn;
 
 
-    @FXML private TextField hoursField;
-    @FXML private TextField minutesField;
-    @FXML private TextField venueField;
-//    @FXML private ComboBox<String> nameComboBox;
-    @FXML private TextField nameField;
-    @FXML private TextField organizerField;
-
-    @FXML private DatePicker datePicker;
-    @FXML private TableColumn<MyEvent, String> nameColumn;
-
-    @FXML private TableColumn<MyEvent, String> venueColumn;
-    @FXML private TableColumn<MyEvent, String> dateColumn;
-    @FXML private TableColumn<MyEvent, String> timeColumn;
-    @FXML private TableColumn<MyEvent, String> organizerColumn;
-    @FXML private TableColumn<MyEvent, MyEvent> editColumn;
-    @FXML private TableColumn<MyEvent, MyEvent> deleteColumn;
-
-
-    @FXML private ObservableList<MyEvent> myEvents = FXCollections.observableArrayList();
+    @FXML
+    private ObservableList<MyEvent> myEvents = FXCollections.observableArrayList();
 
 
     @FXML
@@ -66,9 +73,6 @@ public class EventsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // add listener to avoid invalid input
-        addListenerToField(hoursField, 23);
-        addListenerToField(minutesField, 59);
         // ...
 
         // Set up the columns
@@ -87,23 +91,21 @@ public class EventsController implements Initializable {
         organizerColumn.setCellValueFactory(new PropertyValueFactory<>("organizer"));
 
         // Add an edit button to each row
-        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory =
-                new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
-                    @Override
-                    public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
-                        return new EditButtonCell();
-                    }
-                };
+        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory = new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
+            @Override
+            public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
+                return new EditButtonCell();
+            }
+        };
         editColumn.setCellFactory(cellFactory);
 
         // Add a delete button to each row
-        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory2 =
-                new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
-                    @Override
-                    public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
-                        return new DeleteButtonCell();
-                    }
-                };
+        Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>> cellFactory2 = new Callback<TableColumn<MyEvent, MyEvent>, TableCell<MyEvent, MyEvent>>() {
+            @Override
+            public TableCell<MyEvent, MyEvent> call(TableColumn<MyEvent, MyEvent> column) {
+                return new DeleteButtonCell();
+            }
+        };
         deleteColumn.setCellFactory(cellFactory2);
 
         try {
@@ -115,6 +117,11 @@ public class EventsController implements Initializable {
 
 //        occupy full width
         eventsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+    }
+
+    public void onComboChanged(ActionEvent actionEvent) {
+        System.out.println("combo changed" + typeComboBox.getValue());
     }
 
     public void openMainMenu(ActionEvent actionEvent) throws IOException {
@@ -135,16 +142,17 @@ public class EventsController implements Initializable {
 
     private abstract class MyTableCellButton<T> extends TableCell<T, T> {
         private Button button;
+
         public MyTableCellButton(String text) {
             button = new Button(text);
 
-                // occupy full width
-                button.setMaxWidth(Double.MAX_VALUE);
+            // occupy full width
+            button.setMaxWidth(Double.MAX_VALUE);
 
-                button.setOnAction(event -> {
-                    T myEventItem = getTableRow().getItem();
-                    onEvent(myEventItem);
-                });
+            button.setOnAction(event -> {
+                T myEventItem = getTableRow().getItem();
+                onEvent(myEventItem);
+            });
         }
 
         abstract void onEvent(T myEvent);
@@ -161,21 +169,17 @@ public class EventsController implements Initializable {
         }
     }
 
-//    Define the edit button cell
+    //    Define the edit button cell
     private class EditButtonCell extends MyTableCellButton<MyEvent> {
 
         public EditButtonCell() {
             super("Edit");
         }
 
-//        are all fields empty
+        //        are all fields empty
         private boolean allFieldsEmpty() {
-            return (hoursField.getText()== null || hoursField.getText().isBlank() || hoursField.getText().equals("0") ) &&
-                    ( minutesField.getText() == null || hoursField.getText().isBlank() || minutesField.getText().equals("0") ) &&
-                    (venueField.getText() == null ||venueField.getText().isEmpty()) &&
-                    (nameField.getText() == null ||nameField.getText().isEmpty()) &&
-                    (organizerField.getText() == null ||organizerField.getText().isEmpty()) &&
-                    datePicker.getValue() == null;
+
+            return currentId == -1;
         }
 
         @Override
@@ -192,11 +196,11 @@ public class EventsController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Discard previous");
                 alert.setHeaderText("Are you sure you want to discard previous changes?");
-                alert.setContentText("Event name: " + myEvent.getName() );
+                alert.setContentText("Event name: " + myEvent.getName());
 
                 Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == ButtonType.OK){
+                if (result.get() == ButtonType.OK) {
                     // ... user chose OK
                     // discard previous changes
                     fillFieldsWith(myEvent);
@@ -214,9 +218,11 @@ public class EventsController implements Initializable {
     }
 
     // Define the delete button cell
-    private class DeleteButtonCell extends  MyTableCellButton<MyEvent> {
+    private class DeleteButtonCell extends MyTableCellButton<MyEvent> {
 
-        public DeleteButtonCell() { super("Delete"); }
+        public DeleteButtonCell() {
+            super("Delete");
+        }
 
         @Override
         void onEvent(MyEvent myEvent) {
@@ -226,21 +232,21 @@ public class EventsController implements Initializable {
 //            ask for user, whether he wants to delete event or not
             alert.setTitle("Delete event");
             alert.setHeaderText("Are you sure you want to delete this event?");
-            alert.setContentText("Event name: " + myEvent.getName() );
+            alert.setContentText("Event name: " + myEvent.getName());
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
+            if (result.get() == ButtonType.OK) {
                 // ... user chose OK
                 // delete event from database
 
                 try {
-                    model.deleteEvent(myEvent.getId(), false);
+                    System.out.println("deleting " + myEvent.getId());
+                    model.deleteEvent(myEvent.getId(), true);
                     refreshData();
                 } catch (SQLException e) {
                     System.out.println("exception while deleting");
                     throw new RuntimeException(e);
                 }
-
             } else {
                 // ... user chose CANCEL or closed the dialog
                 System.out.println("print nothing");
@@ -258,7 +264,7 @@ public class EventsController implements Initializable {
         field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             System.out.println("observableValue: " + observableValue);
 //                remove non-digit characters
-            if (newValue == null || newValue.isBlank() ) {
+            if (newValue == null || newValue.isBlank()) {
                 return;
             }
 
@@ -277,95 +283,57 @@ public class EventsController implements Initializable {
     }
 
 
-//    clear all fields
+    //    clear all fields
     private void clearFields() {
-        actionButton.setText("Add");
-        fillFieldsWith(0, 0, null, null, "", "");
-        currentId = -1;
+        fillFieldsWith(-1, "");
     }
 
-    private void fillFieldsWith(MyEvent event){
-        actionButton.setText("Edit");
-        fillFieldsWith(event.getHours(), event.getMinutes(), event.getName(), event.getDate(), event.getVenue(), event.getOrganizer());
-        currentId = event.getId();
+    private void fillFieldsWith(MyEvent event) {
+        fillFieldsWith(event.getId(), event.getName());
     }
 
-    private void fillFieldsWith(int hours, int minutes, String name, LocalDate date, String venue, String organizer) {
-        hoursField.setText(String.valueOf(hours));
-        minutesField.setText(String.valueOf(minutes));
-        nameField.setText(name);
-        datePicker.setValue(date);
-        venueField.setText(venue);
-        organizerField.setText(organizer);
-
-        if (date == null ) {
-            datePicker.getEditor().clear();
-        }
-        else {
-            datePicker.getEditor().setText(date.toString());
-        }
+    private void fillFieldsWith(int id, String name) {
+        nameLabel.setText(name);
+        currentId = id;
+        typeComboBox.setValue(null);
     }
 
-    @FXML private void handleAddButton(ActionEvent event) {
+    @FXML
+    private void handleAddButton(ActionEvent event) {
 //        check operation
+        System.out.println("action button text is " + actionButton.getText());
+        System.out.println("add.id is " + currentId);
+        System.out.println("Add button clicked");
 
-
-        String name = nameField.getText();
-        LocalDate date = datePicker.getValue();
-        int hours = Integer.parseInt(hoursField.getText());
-        int minutes = Integer.parseInt(minutesField.getText());
-        String venue = venueField.getText();
-
-        String organizer = organizerField.getText();
-
-
-        if (actionButton.getText().equals("Edit")) {
-            System.out.println("edit.id is " + currentId);
-            System.out.println("Edit button clicked");
-
-//            update the event from database
-            try {
-                model.updateEvent(name, date, hours, minutes, venue, organizer, currentId);
-
-//                refresh the table
-                refreshData();
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+//                        get current type
+        String type = typeComboBox.getValue();
+        if (type == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Please select event type");
+            alert.showAndWait();
+            return;
         }
-        else {
-            System.out.println("add.id is " + currentId);
-            System.out.println("Add button clicked");
 
 //            add the event to database
-            try {
-                model.addEvent(name, date, hours, minutes, venue, organizer);
+        try {
+            model.approveEvent(currentId, type);
 
-//                refresh the table
-                refreshData();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-//            MyEvent newEvent = new MyEvent(name, date, hours, minutes, venue);
-//
-////            add to events list
-//            myEvents.add(newEvent);
+            // update the table
+            refreshData();
+            System.out.println("event approved");
+        } catch (SQLException e) {
+            System.out.println("exception while approving");
+            throw new RuntimeException(e);
         }
-
-        System.out.println("Hours: " + hoursField.getText());
-        System.out.println("Minutes: " + minutesField.getText());
-        System.out.println("Name: " + nameField.getText());
-        System.out.println("Date: " + datePicker.getValue());
         clearFields();
     }
 
 
-//    synchronize the events list with the database
+    //    synchronize the events list with the database
     private void refreshData() throws SQLException {
-            myEvents = model.getAllEvents();
-            eventsTable.setItems(myEvents);
+        myEvents = model.getPendingEvents();
+        eventsTable.setItems(myEvents);
     }
 //
 //    private void updateEvents(MyEvent event) {
@@ -378,7 +346,8 @@ public class EventsController implements Initializable {
 //        }
 //    }
 
-    @FXML private void handleCancelButton(ActionEvent event) {
+    @FXML
+    private void handleCancelButton(ActionEvent event) {
         System.out.println("Cancel button clicked");
         clearFields();
     }

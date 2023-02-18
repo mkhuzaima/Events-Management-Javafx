@@ -32,7 +32,6 @@ public class ManagementApplication extends Application {
         stage.setScene(scene);
         stage.show();         */
 
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(ManagementApplication.class.getResource("login-view.fxml"));
 
 //        Scene scene = new Scene(fxmlLoader.load(), 500, 325);
@@ -41,6 +40,13 @@ public class ManagementApplication extends Application {
         stage.setTitle("Login Form");
         stage.setScene(scene);
         stage.show();
+//
+//        String[] recipients = {"mkhuzaimaumair@gmail.com", "recipient2@example.com"};
+//        String subject = "Test email from Java";
+//        String message = "Hello, this is a test email sent from Java using Gmail SMTP server.";
+//
+//        Utility.sendEmail(recipients, subject, message);
+
     }
 
     public static void main(String[] args) {

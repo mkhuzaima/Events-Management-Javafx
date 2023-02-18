@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Management:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eef1ae38-c664-43dc-96f4-7a461e46865c" name="Changes" comment="Login screen done">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/DBConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/DBModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/MyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="eef1ae38-c664-43dc-96f4-7a461e46865c" name="Changes" comment="both screens done with crud without db">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Management_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/EventApprovalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/GmailSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/Launcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/MainController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/Resident.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/management/ResidentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/management/events-approval.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/management/main-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/management/residents-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/DBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/DBModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/DBModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/EventsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/EventsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/ManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/ManagementApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/management/MyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/management/MyEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/management/events-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/management/events-view.fxml" afterDir="false" />
     </list>
@@ -20,6 +37,9 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -56,11 +76,32 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/fiverr/Khuzaima/realestate3d/PDFMergerApp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mkhuz/Downloads/javax.mail.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\fiverr\Khuzaima\java_management\Management\src\main\resources\com\example\management" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ManagementApplication">
+    <configuration name="GmailSender" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.management.GmailSender" />
+      <module name="Management.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.management.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ManagementApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.management.ManagementApplication" />
       <module name="Management.main" />
@@ -74,9 +115,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Management [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ManagementApplication" />
+        <item itemvalue="Gradle.Management [dependencies]" />
+        <item itemvalue="Application.GmailSender" />
       </list>
     </recent_temporary>
   </component>
@@ -96,8 +159,19 @@
       <option name="project" value="LOCAL" />
       <updated>1676312726793</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="both screens done with crud without db">
+      <created>1676391350776</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1676391350776</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:com.google.protobuf:protobuf-java" />
+    <option featureType="dependencySupport" implementationName="java:org.openjfx:javafx-base" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -112,6 +186,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Login screen done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Login screen done" />
+    <MESSAGE value="both screens done with crud without db" />
+    <option name="LAST_COMMIT_MESSAGE" value="both screens done with crud without db" />
   </component>
 </project>

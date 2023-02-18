@@ -9,9 +9,8 @@ public class DBConnection {
     private final static String CONNECTION_URL = "jdbc:mysql://localhost:3306/event_management";
     public DBConnection(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(CONNECTION_URL,"root","root");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println("Cannot Connect to the Database:  " + e.getMessage());
             e.printStackTrace();
         }

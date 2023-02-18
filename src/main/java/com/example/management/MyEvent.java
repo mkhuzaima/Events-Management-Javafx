@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class MyEvent {
 
     static int idCounter = 0;
+    private final String organizer;
     private int id = -1;
     private String name;
     private LocalDate date;
@@ -12,7 +13,7 @@ public class MyEvent {
     private int minutes;
     private String venue;
 
-    public MyEvent(String name, LocalDate date, int hours, int minutes, String venue) {
+    public MyEvent(String name, LocalDate date, int hours, int minutes, String organizer, String venue) {
 //        this.name = name;
 //        this.date = date;
 //        this.hours = hours;
@@ -20,17 +21,22 @@ public class MyEvent {
 //        this.venue = venue;
 //        this.id = idCounter++;
 
-        this(name, date, hours, minutes, venue, idCounter++);
+        this(name, date, hours, minutes, venue, organizer, idCounter++);
     }
-    public MyEvent(String name, LocalDate date, int hours, int minutes, String venue, int id) {
+    public MyEvent(String name, LocalDate date, int hours, int minutes, String venue, String organizer, int id) {
         this.name = name;
         this.date = date;
         this.hours = hours;
         this.minutes = minutes;
         this.venue = venue;
+        this.organizer = organizer;
         this.id = id;
     }
 
+
+    public String getOrganizer() {
+        return organizer;
+    }
 
     public int getId() {
         return id;

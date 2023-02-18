@@ -1,333 +1,202 @@
 package com.example.management;
 
-        import javafx.collections.FXCollections;
-        import javafx.collections.ObservableList;
+import jakarta.mail.MessagingException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-        import java.sql.SQLException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class DBModel {
-    private static DBConnection dbConnection = new DBConnection();
+    private static final DBConnection dbConnection = new DBConnection();
+    private static final GmailSender gmailSender = new GmailSender();
 
-//    //Add User
-//    public Boolean addUser(String fname,String lname,String phone,String address,String username,String password) throws SQLException {
-//        String query = "INSERT INTO user(fname,lname,phone,address,username,password) VALUES(?,?,?,?,?,?)";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.setString(1,fname);
-//            dbConnection.preStatement.setString(2,lname);
-//            dbConnection.preStatement.setString(3,phone);
-//            dbConnection.preStatement.setString(4,address);
-//            dbConnection.preStatement.setString(5,username);
-//            dbConnection.preStatement.setString(6,password);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }finally {
-//            dbConnection.preStatement.close();
-//            return false;
-//        }
-//    }
-//    //Add Covid Data
-//    public Boolean addCovidData(String country,String totalCases,String totalDeath,String activeCases,String totalVaccination) throws SQLException{
-//        String query = "INSERT INTO covid_data(country,total_cases,total_death,active_cases,total_vaccination) VALUES(?,?,?,?,?)";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.setString(1,country);
-//            dbConnection.preStatement.setString(2,totalCases);
-//            dbConnection.preStatement.setString(3,totalDeath);
-//            dbConnection.preStatement.setString(4,activeCases);
-//            dbConnection.preStatement.setString(5,totalVaccination);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }finally {
-//            dbConnection.preStatement.close();
-//            return false;
-//        }
-//    }
-//    //Add Favourite
-//    public Boolean addFavourite(String country) throws SQLException{
-//        String query = "INSERT INTO favourite(country) VALUES(?)";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.setString(1,country);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//        }
-//    }
-//    //Add Moderate
-//    public Boolean addModerate(String fname,String lname,String phone,String address,String username,String password) throws SQLException{
-//        String query = "INSERT INTO moderate(fname,lname,phone,address,username,password) VALUES(?,?,?,?,?,?)";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.setString(1,fname);
-//            dbConnection.preStatement.setString(2,lname);
-//            dbConnection.preStatement.setString(3,phone);
-//            dbConnection.preStatement.setString(4,address);
-//            dbConnection.preStatement.setString(5,username);
-//            dbConnection.preStatement.setString(6,password);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }finally {
-//            dbConnection.preStatement.close();
-//            return false;
-//        }
-//    }
-//    //View User
-//    public ObservableList<User> getUser() throws SQLException {
-//        ObservableList<User> datalist = FXCollections.observableArrayList();
-//        String query = "SELECT * FROM user";
-//        try {
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                User user = new User();
-//                user.setId(dbConnection.result.getInt("id"));
-//                user.setFname(dbConnection.result.getString("fname"));
-//                user.setLname(dbConnection.result.getString("lname"));
-//                user.setPhone(dbConnection.result.getString("phone"));
-//                user.setAddress(dbConnection.result.getString("address"));
-//                user.setUsername(dbConnection.result.getString("username"));
-//                user.setPassword(dbConnection.result.getString("password"));
-//                datalist.add(user);
-//            }
-//            return datalist;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //View Moderate
-//    public ObservableList<Moderate> getModerate() throws SQLException {
-//        ObservableList<Moderate> datalist = FXCollections.observableArrayList();
-//        String query = "SELECT * FROM moderate";
-//        try {
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                Moderate moderate = new Moderate();
-//                moderate.setId(dbConnection.result.getInt("id"));
-//                moderate.setFname(dbConnection.result.getString("fname"));
-//                moderate.setLname(dbConnection.result.getString("lname"));
-//                moderate.setPhone(dbConnection.result.getString("phone"));
-//                moderate.setAddress(dbConnection.result.getString("address"));
-//                moderate.setUsername(dbConnection.result.getString("username"));
-//                moderate.setPassword(dbConnection.result.getString("password"));
-//                datalist.add(moderate);
-//            }
-//            return datalist;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //View COVID data
-//    public ObservableList<CovidData> getCovidData() throws SQLException{
-//        ObservableList<CovidData> datalist = FXCollections.observableArrayList();
-//        String query = "SELECT * FROM covid_data";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                CovidData covidData = new CovidData();
-//                covidData.setId(dbConnection.result.getInt(1));
-//                covidData.setCountry(dbConnection.result.getString(2));
-//                covidData.setTotalCases(dbConnection.result.getString(3));
-//                covidData.setTotalDeath(dbConnection.result.getString(4));
-//                covidData.setActiveCases(dbConnection.result.getString(5));
-//                covidData.setTotalVaccination(dbConnection.result.getString(6));
-//                datalist.add(covidData);
-//            }
-//            return datalist;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //View Favourite
-//    public ObservableList<Favourite> getFavourite() throws SQLException{
-//        dbConnection.preStatement = null;
-//        dbConnection.result = null;
-//        ObservableList<Favourite> datalist = FXCollections.observableArrayList();
-//        String query = "SELECT * FROM favourite";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result  =dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                Favourite favourite = new Favourite();
-//                favourite.setId(dbConnection.result.getInt("id"));
-//                favourite.setCountry(dbConnection.result.getString("country"));
-//                datalist.add(favourite);
-//            }
-//            return datalist;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //Search User
-//    public User searchUser(String id) throws SQLException{
-//        User user = new User();
-//        String query = "SELECT * FROM user WHERE id="+id;
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                user.setId(dbConnection.result.getInt("id"));
-//                user.setFname(dbConnection.result.getString("fname"));
-//                user.setLname(dbConnection.result.getString("lname"));
-//                user.setPhone(dbConnection.result.getString("phone"));
-//                user.setAddress(dbConnection.result.getString("address"));
-//                user.setUsername(dbConnection.result.getString("username"));
-//                user.setPassword(dbConnection.result.getString("password"));
-//            }
-//            return user;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //Search Covid Data
-//    public CovidData searchData(String id) throws SQLException{
-//        CovidData covidData = new CovidData();
-//        String query = "SELECT * FROM covid_data WHERE id="+id;
-//        try {
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while(dbConnection.result.next()){
-//                covidData.setId(dbConnection.result.getInt("id"));
-//                covidData.setCountry(dbConnection.result.getString("country"));
-//                covidData.setTotalCases(dbConnection.result.getString("total_cases"));
-//                covidData.setTotalDeath(dbConnection.result.getString("total_death"));
-//                covidData.setActiveCases(dbConnection.result.getString("active_cases"));
-//                covidData.setTotalVaccination(dbConnection.result.getString("total_vaccination"));
-//            }
-//            return covidData;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //Delete Data
-//    public boolean deleteData(String id) throws SQLException{
-//        String query = "DELETE FROM covid_data WHERE id="+id;
-//        try {
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//        }
-//    }
-//    //Update Data
-//    public Boolean updateData(String Id,String country,String totalCases,String totalDeath,String activeCases,String totalVaccination) throws SQLException{
-//        dbConnection.preStatement = null;
-//        String query = "UPDATE covid_data SET country='"+country+"',total_cases='"+totalCases+"',total_death='"+totalDeath+"',active_cases='"+activeCases+"',total_vaccination='"+totalVaccination+"' WHERE id='"+Id+"'";
-//        try {
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-//    //Delete User
-//    public boolean deleteUser(String id) throws SQLException{
-//        String query = "DELETE FROM user WHERE id="+id;
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//        }
-//    }
-//    //Search Moderate
-//    public Moderate searchModerate(String id) throws SQLException{
-//        Moderate user = new Moderate();
-//        String query = "SELECT * FROM moderate WHERE id="+id;
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            while (dbConnection.result.next()){
-//                user.setId(dbConnection.result.getInt("id"));
-//                user.setFname(dbConnection.result.getString("fname"));
-//                user.setLname(dbConnection.result.getString("lname"));
-//                user.setPhone(dbConnection.result.getString("phone"));
-//                user.setAddress(dbConnection.result.getString("address"));
-//                user.setUsername(dbConnection.result.getString("username"));
-//                user.setPassword(dbConnection.result.getString("password"));
-//            }
-//            return user;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    //Delete Moderate
-//    public boolean deleteModerate(String id) throws SQLException{
-//        String query = "DELETE FROM moderate WHERE id="+id;
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//        }
-//    }
-//    //Delete Favourite
-//    public Boolean deleteFavourite(String country) throws SQLException{
-//        String query = "DELETE FROM favourite WHERE country ='"+country+"'";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.executeUpdate();
-//            return true;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//        }
-//    }
-//    //Moderate Login
-//    public Boolean ModerateLogin(String username,String password) throws SQLException{
-//        dbConnection.preStatement = null;
-//        dbConnection.result = null;
-//        String query = "SELECT * FROM moderate WHERE username = ? AND password = ?";
-//        try{
-//            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
-//            dbConnection.preStatement.setString(1,username);
-//            dbConnection.preStatement.setString(2,password);
-//            dbConnection.result = dbConnection.preStatement.executeQuery();
-//            return dbConnection.result.next();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }finally {
-//            dbConnection.preStatement.close();
-//            dbConnection.result.close();
-//        }
-//    }
-//
+    //Get All Events
+    public ObservableList<MyEvent> getAllEvents() throws SQLException {
+        return getEvents("");
+    }
+
+
+    public ObservableList<MyEvent> getPendingEvents() {
+        return getEvents("where isFormal is null");
+    }
+
+    private ObservableList<MyEvent> getEvents(String condition) {
+        ObservableList<MyEvent> myEvents = FXCollections.observableArrayList();
+        String query = "SELECT * FROM table_event "+condition;
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.result = dbConnection.preStatement.executeQuery();
+            while (dbConnection.result.next()) {
+                myEvents.add(new MyEvent(dbConnection.result.getString("Name"),
+                        dbConnection.result.getDate("Date").toLocalDate(),
+                        dbConnection.result.getTime("Time").toLocalTime().getHour(),
+                        dbConnection.result.getTime("Time").toLocalTime().getMinute(),
+                        dbConnection.result.getString("Venue"),
+                        dbConnection.result.getString("Organizer"),
+                        dbConnection.result.getInt("Id")
+                ));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return myEvents;
+    }
+
+
+    public void approveEvent(int currentId, String type) throws SQLException {
+
+        boolean isFormal = type.equals("Formal");
+
+        String query = "UPDATE table_event SET isFormal = ? WHERE Id = ?";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setBoolean(1,isFormal);
+            dbConnection.preStatement.setInt(2,currentId);
+            dbConnection.preStatement.executeUpdate();
+
+            String organizerEmail = getOrganizerEmailFromId(currentId);
+            ArrayList<String> emails = getAllResidentsEmails();
+            emails.add(organizerEmail);
+
+            String message = "Your event has been approved as formal. Please check the system for more details.";
+            if (!isFormal) {
+                message = "Your event has been approved as recreational. Please check the system for more details.";
+            }
+            gmailSender.sendEmail(emails, "Event: approved.", message);
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Error while sending email");
+        } finally {
+                dbConnection.preStatement.close();
+        }
+    }
+
+    //Update Event
+    public Boolean updateEvent(String name, LocalDate date, int hours, int minutes, String venue, String organizer, int id) throws SQLException {
+        String query = "UPDATE table_event SET Name = ?, Date = ?, Time = ?, Venue = ?, Organizer = ? WHERE Id = ?";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setString(1,name);
+            dbConnection.preStatement.setDate(2,java.sql.Date.valueOf(date));
+            dbConnection.preStatement.setTime(3,java.sql.Time.valueOf(java.time.LocalTime.of(hours,minutes)));
+            dbConnection.preStatement.setString(4,venue);
+            dbConnection.preStatement.setString(5,organizer);
+            dbConnection.preStatement.setInt(6,id);
+            dbConnection.preStatement.executeUpdate();
+
+            ArrayList<String> emails = getAllResidentsEmails();
+            String organizerEmail = getOrganizerEmailFromId(id);
+            emails.add(organizerEmail);
+
+            gmailSender.sendEmail(emails, "Event: updated.", "An event has been updated in the system. Please check the system for more details.");
+
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            dbConnection.preStatement.close();
+            return false;
+        }
+    }
+
+
+    //Delete Event
+    public Boolean deleteEvent(int id, boolean isRejected) throws SQLException {
+        String organizerEmail = getOrganizerEmailFromId(id);
+
+        String query = "DELETE FROM table_event WHERE Id = ?";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setInt(1,id);
+            dbConnection.preStatement.executeUpdate();
+
+
+//            if event was not approved, send email to only organizer
+            if (isRejected) {
+                ArrayList<String> recipients = new ArrayList<>();
+                recipients.add(organizerEmail);
+                gmailSender.sendEmail(recipients, "Event: rejected.", "Your event has been rejected. Please check the system for more details.");
+            }
+            else {
+                ArrayList<String> emails = getAllResidentsEmails();
+                emails.add(organizerEmail);
+                gmailSender.sendEmail( emails, "Event: deleted.", "An event has been deleted from the system. Please check the system for more details.");
+            }
+
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            dbConnection.preStatement.close();
+            return false;
+        }
+    }
+
+    //Add Event
+    public Boolean addEvent(String name, LocalDate date, int hours, int minutes, String venue, String organizer ) throws SQLException {
+
+        System.out.println("add event called");
+        String query = "INSERT INTO table_event (Name, Date, Time, Venue, Organizer) VALUES (?,?,?,?,?)";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setString(1,name);
+            dbConnection.preStatement.setDate(2,java.sql.Date.valueOf(date));
+            dbConnection.preStatement.setTime(3,java.sql.Time.valueOf(java.time.LocalTime.of(hours,minutes)));
+            dbConnection.preStatement.setString(4,venue);
+            dbConnection.preStatement.setString(5,organizer);
+            dbConnection.preStatement.executeUpdate();
+
+            ArrayList<String> emails = getAllResidentsEmails();
+            emails.add(organizer);
+
+            gmailSender.sendEmail(emails, "Event: "+name + " added.", "A new event has been added to the system. Please check the system for more details.");
+
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+                dbConnection.preStatement.close();
+            return false;
+        }
+
+    }
+    
+    private String getOrganizerEmailFromId(int id) {
+        String query = "SELECT organizer from table_event where id = ?";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setInt(1,id);
+            dbConnection.result = dbConnection.preStatement.executeQuery();
+            if (dbConnection.result.next()) {
+                return dbConnection.result.getString("organizer");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private ArrayList<String> getAllResidentsEmails() {
+        ArrayList<String> emails = new ArrayList<>();
+        String query = "SELECT email FROM table_resident";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.result = dbConnection.preStatement.executeQuery();
+            while (dbConnection.result.next()) {
+                emails.add(dbConnection.result.getString("email"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return emails;
+    }
+
     //User Login
     public Boolean UserLogin(String username,String password) throws SQLException{
         dbConnection.preStatement = null;
@@ -347,5 +216,75 @@ public class DBModel {
             dbConnection.preStatement.close();
             dbConnection.result.close();
         }
+    }
+
+    public void updateResident(String name, String houseNumber, String cluster, String email, int currentId) {
+        String query = "UPDATE table_resident SET name = ?, house_number = ?, cluster = ?, email = ? WHERE id = ?";
+
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setString(1, name);
+            dbConnection.preStatement.setString(2, houseNumber);
+            dbConnection.preStatement.setString(3, cluster);
+            dbConnection.preStatement.setString(4, email);
+            dbConnection.preStatement.setInt(5, currentId);
+            dbConnection.preStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addResident(String name, String houseNumber, String cluster, String email) {
+        String query = "INSERT INTO table_resident (name, house_number, cluster, email) VALUES (?, ?, ?, ?)";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setString(1, name);
+            dbConnection.preStatement.setString(2, houseNumber);
+            dbConnection.preStatement.setString(3, cluster);
+            dbConnection.preStatement.setString(4, email);
+            dbConnection.preStatement.executeUpdate();
+        }catch (Exception e){
+
+        }
+    }
+
+    public ObservableList<Resident> getAllResidents() {
+        // get all residents from the database
+        ObservableList<Resident> residents = FXCollections.observableArrayList();
+        String query = "SELECT * FROM event_management.table_resident";
+        try {
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.result = dbConnection.preStatement.executeQuery();
+            while (dbConnection.result.next()) {
+                Resident resident = new Resident();
+                resident.setId(dbConnection.result.getInt("id"));
+                resident.setName(dbConnection.result.getString("name"));
+                resident.setHouseNumber(dbConnection.result.getString("house_number"));
+                resident.setCluster(dbConnection.result.getString("cluster"));
+                resident.setEmail(dbConnection.result.getString("email"));
+                residents.add(resident);
+            }
+            return residents;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deleteResident(int id) {
+        String query = "DELETE FROM table_resident WHERE id = ?";
+        try{
+            dbConnection.preStatement = dbConnection.connection.prepareStatement(query);
+            dbConnection.preStatement.setInt(1, id);
+            dbConnection.preStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAnnouncement(String announcement) throws MessagingException {
+        ArrayList<String> emails = getAllResidentsEmails();
+        gmailSender.sendEmail(emails, "Announcement", announcement);
+
     }
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.management.ResidentController">
+   <children>
+      <VBox alignment="CENTER" layoutX="200.0" layoutY="42.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Resident Management" textAlignment="CENTER">
+               <font>
+                  <Font size="28.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="400.0" prefWidth="200.0">
+               <children>
+                  <GridPane alignment="CENTER" prefHeight="167.0" prefWidth="334.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="84.00001525878906" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="249.99998474121094" minWidth="10.0" prefWidth="249.99998474121094" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Name" />
+                        <Label text="House Number" GridPane.rowIndex="1" />
+                        <Label text="Cluster" GridPane.rowIndex="2" />
+                         <Label text="Email" GridPane.rowIndex="3" />
+
+                         <TextField fx:id="nameField" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                         <TextField fx:id="houseNumberField" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <TextField fx:id="clusterField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                         <TextField fx:id="emailField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                           <children>
+                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCancelButton" prefWidth="100.0" text="Cancel" />
+                              <Button fx:id="actionButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleActionButton" prefWidth="100.0" text="Add" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <GridPane alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="65.4" minHeight="10.0" percentHeight="60.0" prefHeight="54.4" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" percentHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <opaqueInsets>
+                        <Insets left="10.0" />
+                     </opaqueInsets>
+                     <children>
+
+
+                         <Label text="Announcement" />
+
+                         <TextArea fx:id="announcementField" maxHeight="1.7976931348623157E308" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                           <GridPane.margin>
+                              <Insets bottom="8.0" />
+                           </GridPane.margin></TextArea>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+                           <children>
+                              <Button fx:id="sendAnnouncementButton" onAction="#onSendAnnouncementButtonClicked" alignment="CENTER" mnemonicParsing="false" prefWidth="100.0" text="Add" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </GridPane>
+               </children></HBox>
+
+<!--             create tableview for above fields-->
+             <TableView fx:id="residentsTable">
+                 <columns>
+                     <TableColumn fx:id="nameColumn" prefWidth="100" text="Name" />
+                     <TableColumn fx:id="houseNumberColumn" prefWidth="100" text="House#" />
+                     <TableColumn fx:id="clusterColumn" prefWidth="100" text="Cluster" />
+<!--                     organizer column-->
+                    <TableColumn fx:id="emailColumn" prefWidth="100" text="Email" />
+                     <TableColumn fx:id="editColumn" prefWidth="50" text="Edit" />
+                     <TableColumn fx:id="deleteColumn" prefWidth="50" text="Delete" />
+                 </columns>
+             </TableView>
+            <Button onAction="#openMainMenu" mnemonicParsing="false" text="Back" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

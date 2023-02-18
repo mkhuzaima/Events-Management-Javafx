@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.management.EventApprovalController">
+    <children>
+        <VBox alignment="CENTER" layoutX="200.0" layoutY="42.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Events Approval Form" textAlignment="CENTER">
+                    <font>
+                        <Font size="28.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="20.0" />
+                    </padding>
+                </Label>
+                <HBox alignment="CENTER" prefHeight="400.0" prefWidth="200.0">
+                    <children>
+                        <GridPane alignment="CENTER" prefHeight="167.0" prefWidth="334.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="84.00001525878906" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="249.99998474121094" minWidth="10.0" prefWidth="249.99998474121094" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Name" />
+                                <Label text="Type" GridPane.rowIndex="1" />
+                                <Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+
+                                <ComboBox fx:id="typeComboBox" maxWidth="1.7976931348623157E308" onAction="#onComboChanged" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                                 <items>
+                                     <FXCollections fx:factory="observableArrayList">
+                                         <String fx:value="Formal" />
+                                         <String fx:value="Recreational" />
+                                     </FXCollections>
+                                 </items>
+
+                                </ComboBox>
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                    <children>
+                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCancelButton" prefWidth="100.0" text="Cancel" />
+                                        <Button fx:id="actionButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleAddButton" prefWidth="100.0" text="Approve" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </GridPane>
+                    </children></HBox>
+
+                <!--             create tableview for above fields-->
+                <TableView fx:id="eventsTable">
+                    <columns>
+                        <TableColumn fx:id="nameColumn" prefWidth="100" text="Name" />
+                        <TableColumn fx:id="dateColumn" prefWidth="70.0" text="Date" />
+                        <TableColumn fx:id="timeColumn" prefWidth="50.0" text="Time" />
+                        <TableColumn fx:id="venueColumn" prefWidth="125.0" text="Venue" />
+                        <!--                     organizer column-->
+                        <TableColumn fx:id="organizerColumn" prefWidth="85.0" text="Organizer" />
+                        <TableColumn fx:id="editColumn" prefWidth="65.39999389648438" text="Edit" />
+                        <TableColumn fx:id="deleteColumn" prefWidth="50" text="Delete" />
+                    </columns>
+                </TableView>
+            <Button onAction="#openMainMenu" mnemonicParsing="false" text="Back" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

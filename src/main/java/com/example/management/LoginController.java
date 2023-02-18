@@ -81,7 +81,7 @@ public class LoginController implements Initializable {
             }
             else {
                 if (model.UserLogin(txtEmail.getText(), pass_hidden.getText())) {
-                    FXMLLoader fxmlLoader = new FXMLLoader(ManagementApplication.class.getResource("events-view.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(ManagementApplication.class.getResource("main-view.fxml"));
 
                     Parent root1 = fxmlLoader.load();
 

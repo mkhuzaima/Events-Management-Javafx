@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<AnchorPane prefHeight="395.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.management.MainController">
+   <children>
+
+<!--       a vertical box containing title and 3 buttons-->
+<!--       vbox with space evenly, and occupy complete space, horizontally center -->
+
+         <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                <Label alignment="CENTER" text="User Management System" VBox.vgrow="NEVER">
+                    <font>
+                        <Font size="28.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Label>
+
+<!--                  buttons for 3 screen-->
+<!--                  manage events -->
+                <Button mnemonicParsing="false" onAction="#manageEvents" text="Manage Events" VBox.vgrow="NEVER" />
+<!--                  approve events-->
+                <Button mnemonicParsing="false" onAction="#approveEvents" text="Approve Events" VBox.vgrow="NEVER" />
+<!--                  manage residents-->
+                <Button mnemonicParsing="false" onAction="#manageResidents" text="Manage Residents" VBox.vgrow="NEVER" />
+
+<!--                  logout button -->
+                <Button mnemonicParsing="false" onAction="#logout" text="Logout" VBox.vgrow="NEVER" />
+
+<!--                  exit button -->
+                <Button mnemonicParsing="false" onAction="#exit" text="Exit" VBox.vgrow="NEVER" />
+
+              </children>
+         </VBox>
+   </children>
+</AnchorPane>
